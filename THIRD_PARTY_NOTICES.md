@@ -4,6 +4,7 @@
 [Souls-R/silksong-ipados](https://github.com/Souls-R/silksong-ipados) 的 MIT 许可代码，
 并针对《Hollow Knight》一代独立适配。原许可及版权声明保留在 [LICENSE](LICENSE)。
 参考版本：`e596b1ad6bda14113208faf82aa31c8d560b0a26`。
+DS 手柄触摸板适配来自后续版本 `106220a7195c56b7aa388284121f28a3e359cbb7`。
 
 Input, animation, haptics, texture-conversion and launcher compatibility code was
 adapted from the MIT-licensed project above. The original notice is retained.

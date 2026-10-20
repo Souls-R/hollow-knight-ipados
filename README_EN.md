@@ -22,6 +22,7 @@ python3 build.py resource-zip   Archive resources for Files import
 ## Features
 
 - iOS gamepad, external keyboard, and mouse input adapters.
+- DualSense / DualShock touchpad-button support.
 - Controller vibration bridge with original game settings.
 - Original display-menu resolution/frame-rate bridge and iPad aspect adaptation.
 - General Animator binding repair.
@@ -106,7 +107,7 @@ python3 build.py prepare --game-data "$gameData" --host-tools "$hostTools" --ios
 
 The iOS support directory must contain `Trampoline/`, `il2cpp/`, `Variations/` and `Data/`. Host tools must contain `NetCoreRuntime/`, `DotNetSdkRoslyn/` and `MonoBleedingEdge/`. Adjust paths when using extracted installer packages.
 
-Resource conversion resumes completed files when rerun. `prepare` requires fresh native and resource-pack output directories. The default version is **0.2.2 / build 6**; change it with `--version` and `--build-number`.
+Resource conversion resumes completed files when rerun. `prepare` requires fresh native and resource-pack output directories. The default version is **0.2.3 / build 7**; change it with `--version` and `--build-number`.
 
 ### Compile and install
 
@@ -114,7 +115,7 @@ Resource conversion resumes completed files when rerun. `prepare` requires fresh
 python3 build.py native --work "$nativeOutput" --jobs 4
 ```
 
-Output: `$nativeOutput/output/HollowKnight-0.2.2-split-unsigned.ipa`. Logs: `$nativeOutput/logs/`. Subsequent builds reuse compilation caches.
+Output: `$nativeOutput/output/HollowKnight-0.2.3-split-unsigned.ipa`. Logs: `$nativeOutput/logs/`. Subsequent builds reuse compilation caches.
 
 Sign and install using your own sideloading tool.
 
@@ -161,7 +162,7 @@ Update in place with the same signing account and bundle identifier to retain sa
 
 | Item | Scope |
 | --- | --- |
-| Baseline | 0.2.2 / build 6 experimental version |
+| Baseline | 0.2.3 / build 7 experimental version |
 | Game | Steam macOS 1.5.12620 / Unity 6000.0.61f1 |
 | Deployment target | iOS / iPadOS 16.0 |
 | Device | 11-inch iPad Pro (2021, M1), iPadOS 26.6.2 |
@@ -169,6 +170,10 @@ Update in place with the same signing account and bundle identifier to retain sa
 | Controller | Xbox, with Menu pause and View inventory |
 
 ## Changes
+
+### 0.2.3
+
+- Port the DS touchpad-button fix from Silksong, restoring input to the original game bindings.
 
 ### 0.2.2
 

@@ -22,6 +22,7 @@ python3 build.py resource-zip   打包资源 ZIP
 ## 功能
 
 - iOS 手柄、外接键盘和鼠标输入适配。
+- DualSense / DualShock 触摸板按键适配。
 - 手柄震动输出桥接，保留原游戏的震动设置。
 - 原版设置菜单的分辨率和帧率桥接、iPad 画幅适配。
 - 通用 Animator 绑定修复。
@@ -110,7 +111,7 @@ python3 build.py prepare --game-data "$gameData" --host-tools "$hostTools" --ios
 
 `iosSupport` 应包含 `Trampoline/`、`il2cpp/`、`Variations/` 和 `Data/`；`hostTools` 应包含 `NetCoreRuntime/`、`DotNetSdkRoslyn/` 和 `MonoBleedingEdge/`。如由安装包提取工具链，请把变量指向对应目录。
 
-资源转换支持继续运行同一命令，复用已完成的文件。`prepare` 要求尚不存在的原生工程和资源包输出目录；重新生成时选新目录。默认版本为 **0.2.2 / build 6**，可用 `--version`、`--build-number` 修改。
+资源转换支持继续运行同一命令，复用已完成的文件。`prepare` 要求尚不存在的原生工程和资源包输出目录；重新生成时选新目录。默认版本为 **0.2.3 / build 7**，可用 `--version`、`--build-number` 修改。
 
 ### 编译与签名安装
 
@@ -118,7 +119,7 @@ python3 build.py prepare --game-data "$gameData" --host-tools "$hostTools" --ios
 python3 build.py native --work "$nativeOutput" --jobs 4
 ```
 
-IPA 位于 `$nativeOutput/output/HollowKnight-0.2.2-split-unsigned.ipa`，构建日志在 `$nativeOutput/logs/`。再次执行会复用编译缓存。
+IPA 位于 `$nativeOutput/output/HollowKnight-0.2.3-split-unsigned.ipa`，构建日志在 `$nativeOutput/logs/`。再次执行会复用编译缓存。
 
 使用自己的侧载工具签名安装。
 
@@ -165,7 +166,7 @@ Documents/
 
 | 项目 | 当前范围 |
 | --- | --- |
-| 基线版本 | 0.2.2 / build 6 测试版 |
+| 基线版本 | 0.2.3 / build 7 测试版 |
 | 原游戏 | Steam macOS 1.5.12620 / Unity 6000.0.61f1 |
 | 最低部署目标 | iOS / iPadOS 16.0 |
 | 实测设备 | iPad Pro 11 英寸（2021，M1），iPadOS 26.6.2 |
@@ -173,6 +174,10 @@ Documents/
 | 手柄 | Xbox，支持 Menu 暂停和 View 背包 |
 
 ## 更新说明
+
+### 0.2.3
+
+- 同步丝之歌的 DS 手柄触摸板按键修复，补回原游戏绑定所需的输入。
 
 ### 0.2.2
 

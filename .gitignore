@@ -21,6 +21,8 @@
 !/src/launch/strings.json
 !/tests/
 !/tests/*.py
+!/tests/*.cs
+!/tests/*.cpp
 !/docs/
 !/docs/*.md
 !/.github/

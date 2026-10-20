@@ -33,7 +33,7 @@ docs/                     构建说明
 只改 `.mm` / `.h` 或打包设置时：
 
 ```sh
-python3 build.py relink --work "$nativeOutput" --version 0.2.2 --build-number 7
+python3 build.py relink --work "$nativeOutput" --version 0.2.3 --build-number 8
 ```
 
 这会同步原生源文件、调用 Xcode 并重打 IPA，复用原有游戏代码库。
@@ -59,6 +59,12 @@ python3 build.py native --work "$nativeOutput" --jobs 4
 
 ```sh
 python3 -m unittest discover -s tests -p 'test_resource_plan.py'
+```
+
+手柄回归测试（需要 C++ 编译器和 .NET SDK 8 或更新版本）：
+
+```sh
+python3 -m unittest discover -s tests -p 'test_controller_input.py'
 ```
 
 在 Mac 上运行 Foundation 路径与导入测试：

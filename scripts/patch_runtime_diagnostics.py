@@ -8,11 +8,13 @@ from pathlib import Path
 import hashlib
 import json
 import re
+import time
 
 METHOD = re.compile(r'^IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR [^\n]+? (\w+) \([^\n]+\)\s*\n\{', re.M)
 MARKER = '// HK_DIAGNOSTICS_021'
 
 def apply(cpp):
+    backup_root = cpp.parent/('diagnostics-before-'+str(time.time_ns()))
     pool = list(cpp.glob('UnityEngine.CoreModule*.cpp')) + list(cpp.glob('Unity.InputSystem*.cpp')) + list(cpp.glob('Assembly-CSharp*.cpp')) + [cpp/'NativeCompatibility.cpp', cpp/'UnityEngine.VideoModule.cpp', cpp/'TeamCherry.Cinematics.cpp']
     wanted = set('''NativePreferences_get_CompatibilityLogs Debug_Log Debug_LogError Debug_LogException
 Gamepad_get_current Gamepad_get_startButton Gamepad_get_selectButton ButtonControl_get_wasPressedThisFrame ButtonControl_get_wasReleasedThisFrame OneAxisInputControl_get_WasPressed
@@ -56,7 +58,7 @@ Renderer_get_sharedMaterial Renderer_get_enabled Renderer_get_isVisible Material
         for start,end,new in reversed(edits):source=source[:start]+new+source[end:]
         position=METHOD.search(source).start()
         source=includes+source[:position]+MARKER+'\n'+header+source[position:]
-        backup=cpp.parent/'diagnostics-before-0.2.1'/file
+        backup=backup_root/file
         backup.parent.mkdir(exist_ok=True)
         assert not backup.exists()
         backup.write_text(original)

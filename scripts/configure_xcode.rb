@@ -45,7 +45,7 @@ app.resources_build_phase.add_file_reference(data) unless app.resources_build_ph
 %w[Metal MetalKit GameController CoreHaptics Security WebKit SafariServices Accelerate CoreText].each do |name|
   framework.add_system_framework(name) unless framework.frameworks_build_phase.files_references.any? { |f| f.path.to_s.end_with?(name + '.framework') }
 end
-%w[RegisterModules.cpp NativeKeyboard.mm NativeMouse.mm NativeHaptics.mm NativeLaunch.mm].each do |name|
+%w[RegisterModules.cpp NativeKeyboard.mm NativeMouse.mm NativeControllerInput.mm NativeHaptics.mm NativeLaunch.mm].each do |name|
   path = 'Libraries/' + name
   next unless File.exist?(File.join(root,path))
   ref = p.files.find { |f| f.path == path } || p.main_group.new_file(path, 'SOURCE_ROOT')
