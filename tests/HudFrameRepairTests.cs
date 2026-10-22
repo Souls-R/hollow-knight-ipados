@@ -32,6 +32,18 @@ public static class HudFrameRepairTests
         try { NativeHudFrameRepair.Repair(bad,native,width,height,new[]{F("GG_nail_bound",0),F("GG_soul_cap",15)},p=>p>0); }
         catch(ArgumentException) { rejected=true; }
         Check(rejected && bad[0]==0,"Validate every rectangle before changing pixels");
+        // Preserve authored legacy mask pixels, including their orientation,
+        // rather than replacing the skin's entire health idle with vanilla.
+        var authored=new byte[16*8]; var current=new byte[authored.Length];
+        var normal=new NativeHudFrameRepair.Frame("idle_v020000",0,0,2,3);
+        var rotated=new NativeHudFrameRepair.Frame("idle_v020001",3,0,3,2,true);
+        var legacy=new NativeHudFrameRepair.Frame("legacy",0,5,3,2);
+        for(int i=0;i<3;i++) {authored[5*16+i]=(byte)(11+i); authored[6*16+i]=(byte)(21+i);}
+        for(int i=0;i<current.Length;i++) current[i]=200;
+        int rebuilt=NativeHudFrameRepair.Repair(authored,current,16,8,new[]{normal,rotated},p=>p>0,legacy);
+        Check(rebuilt==2 && authored[0]==21 && authored[1]==11 && authored[32]==23,"Legacy authored idle rebuilt upright");
+        Check(authored[3]==21 && authored[4]==22 && authored[5]==23 && authored[19]==11,"Rotated target atlas respected");
+        Check(NativeHudFrameRepair.Repair(authored,current,16,8,new[]{normal,rotated},p=>p>0,legacy)==0,"Authored reconstruction idempotent");
         Console.WriteLine("HUD_FRAME_REPAIR_TESTS_PASS");
     }
 }

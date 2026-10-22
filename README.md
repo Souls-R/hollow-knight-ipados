@@ -24,6 +24,7 @@ python3 build.py resource-zip   打包资源 ZIP
 - iOS 手柄、外接键盘和鼠标输入适配。
 - DualSense / DualShock 触摸板按键适配。
 - 独立 PNG 皮肤包与游戏内切换，使用方法见 [皮肤说明](docs/SKINS.md)。
+- 原生怪物/Boss 血条和伤害数字，使用方法见 [怪物血条](docs/ENEMY_HUD.md)。
 - 手柄震动输出桥接，保留原游戏的震动设置。
 - 原版设置菜单的分辨率和帧率桥接、iPad 画幅适配。
 - 通用 Animator 绑定修复。
@@ -112,7 +113,7 @@ python3 build.py prepare --game-data "$gameData" --host-tools "$hostTools" --ios
 
 `iosSupport` 应包含 `Trampoline/`、`il2cpp/`、`Variations/` 和 `Data/`；`hostTools` 应包含 `NetCoreRuntime/`、`DotNetSdkRoslyn/` 和 `MonoBleedingEdge/`。如由安装包提取工具链，请把变量指向对应目录。
 
-资源转换支持继续运行同一命令，复用已完成的文件。`prepare` 要求尚不存在的原生工程和资源包输出目录；重新生成时选新目录。默认版本为 **0.2.5 / build 9**，可用 `--version`、`--build-number` 修改。
+资源转换支持继续运行同一命令，复用已完成的文件。`prepare` 要求尚不存在的原生工程和资源包输出目录；重新生成时选新目录。默认版本为 **0.2.6 / build 10**，可用 `--version`、`--build-number` 修改。
 
 ### 编译与签名安装
 
@@ -120,7 +121,7 @@ python3 build.py prepare --game-data "$gameData" --host-tools "$hostTools" --ios
 python3 build.py native --work "$nativeOutput" --jobs 4
 ```
 
-IPA 位于 `$nativeOutput/output/HollowKnight-0.2.5-split-unsigned.ipa`，构建日志在 `$nativeOutput/logs/`。再次执行会复用编译缓存。
+IPA 位于 `$nativeOutput/output/HollowKnight-0.2.6-split-unsigned.ipa`，构建日志在 `$nativeOutput/logs/`。再次执行会复用编译缓存。
 
 使用自己的侧载工具签名安装。
 
@@ -175,6 +176,11 @@ Documents/
 | 手柄 | Xbox，支持 Menu 暂停和 View 背包 |
 
 ## 更新说明
+
+### 0.2.6
+
+- 加入怪物血条、Boss 血条、伤害数字及暂停开关。
+- 优先用旧皮肤自己的血量图标重建新版待机帧，减少原版 HUD 回退。
 
 ### 0.2.5
 

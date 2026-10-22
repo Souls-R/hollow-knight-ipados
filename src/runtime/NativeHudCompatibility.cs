@@ -18,7 +18,8 @@ public static class NativeHudCompatibility
             foreach (var uv in def.uvs) { minX=Math.Min(minX,uv.x); minY=Math.Min(minY,uv.y); maxX=Math.Max(maxX,uv.x); maxY=Math.Max(maxY,uv.y); }
             int x=Mathf.RoundToInt(minX*skin.width), y=Mathf.RoundToInt(minY*skin.height);
             int w=Mathf.RoundToInt(maxX*skin.width)-x, h=Mathf.RoundToInt(maxY*skin.height)-y;
-            if (w>0 && h>0) frames.Add(new NativeHudFrameRepair.Frame(def.name,x,y,w,h));
+            bool rotated=Math.Abs(def.uvs[0].x-def.uvs[1].x)<.0001f;
+            if (w>0 && h>0) frames.Add(new NativeHudFrameRepair.Frame(def.name,x,y,w,h,rotated));
         }
         RenderTexture previous=RenderTexture.active, target=null;
         Texture2D readable=null;
@@ -29,7 +30,10 @@ public static class NativeHudCompatibility
             readable=new Texture2D(skin.width,skin.height,TextureFormat.RGBA32,false);
             readable.ReadPixels(new Rect(0,0,skin.width,skin.height),0,0,false);
             var pixels=skin.GetPixels32();
-            int count=NativeHudFrameRepair.Repair(pixels,readable.GetPixels32(),skin.width,skin.height,frames.ToArray(),p=>p.a>=16);
+            int size=skin.width/2048;
+            // Custom Knight's own SaveHud normalHealth extraction rectangle.
+            var legacy=new NativeHudFrameRepair.Frame("legacy-health",275*size,(2048-813-59)*size,65*size,59*size);
+            int count=NativeHudFrameRepair.Repair(pixels,readable.GetPixels32(),skin.width,skin.height,frames.ToArray(),p=>p.a>=16,legacy);
             if (count>0) skin.SetPixels32(pixels);
             skin.Apply(false,true);
             return count;

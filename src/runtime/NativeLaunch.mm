@@ -3,6 +3,12 @@
 #import <GameController/GameController.h>
 #import <QuartzCore/QuartzCore.h>
 #include <math.h>
+#include <string.h>
+
+extern "C" __attribute__((visibility("default"))) char* NativeEnemyHud_AssetsPath()
+{
+    return strdup([[[NSBundle mainBundle].bundlePath stringByAppendingPathComponent:@"NativeEnemyHud"] UTF8String]);
+}
 
 extern "C" UIView* UnityGetGLView();
 

@@ -25,6 +25,13 @@ Python 依赖由 `requirements.txt` 指定，通过包管理器安装；其许�
 Python dependencies are installed separately. Their respective licenses apply.
 Artwork, fonts and icons are extracted locally from the user's purchased game.
 
+## Enemy Health Bar with Damage Number
+
+怪物血条功能参考用户独立获取的 HollowBoys
+[Enemy Health Bar with Damage Number](https://www.nexusmods.com/hollowknight/mods/123) 的功能和图片命名。
+本仓库独立实现原生生命值观察、界面与开关，不分发或加载该桌面 DLL 及其 BepInEx/Harmony 依赖。
+可选默认美术从用户自己的 Mod ZIP 只读提取到本地构建目录；美术属于原权利人，不包含在源码仓库中，也不适用本仓库 MIT 许可。
+
 ## Custom Knight
 
 皮肤 PNG 命名、角色/特效与过场替身的定位方式参考

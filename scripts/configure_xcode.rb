@@ -52,7 +52,7 @@ end
   build = framework.source_build_phase.files.find { |f| f.file_ref == ref } || framework.source_build_phase.add_file_reference(ref)
   build.settings = {'COMPILER_FLAGS' => '-fobjc-arc'} if name.end_with?('.mm')
 end
-%w[NativeLaunchAssets NativeIcons.xcassets Settings.bundle zh-Hans.lproj zh-Hant.lproj en.lproj].each do |path|
+%w[NativeLaunchAssets NativeEnemyHud NativeIcons.xcassets Settings.bundle zh-Hans.lproj zh-Hant.lproj en.lproj].each do |path|
   next unless File.exist?(File.join(root,path))
   ref = p.files.find { |f| f.path == path } || p.main_group.new_file(path, 'SOURCE_ROOT')
   ref.last_known_file_type = path.end_with?('.xcassets') ? 'folder.assetcatalog' : 'folder'

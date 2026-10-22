@@ -34,6 +34,7 @@ public sealed class HollowKnightBootstrap : MonoBehaviour
         host.AddComponent<NativeAnimatorCompatibility>();
         host.AddComponent<NativeDisplaySettings>();
         host.AddComponent<NativeSkins>();
+        host.AddComponent<NativeEnemyHud>();
         if (NativePreferences.StartupDetails) host.AddComponent<NativeDiagnosticOverlay>();
         if (NativePreferences.ResourceLogs) host.AddComponent<NativePerformanceSampler>();
     }
@@ -45,7 +46,7 @@ public sealed class HollowKnightBootstrap : MonoBehaviour
             bool error = type == LogType.Error || type == LogType.Exception || type == LogType.Assert;
             // Selection/repair summaries are sparse and useful even when the
             // optional per-frame diagnostics are disabled.
-            if (!error && !NativePreferences.Diagnostics && !message.StartsWith("HK_SKIN:",StringComparison.Ordinal)) return;
+            if (!error && !NativePreferences.Diagnostics && !message.StartsWith("HK_SKIN:",StringComparison.Ordinal) && !message.StartsWith("HK_ENEMY_HUD:",StringComparison.Ordinal)) return;
             if (NativePreferences.StartupDetails) NativeDiagnosticOverlay.Add(message);
             if (bytes > 4 * 1024 * 1024) return;
             string line = DateTime.UtcNow.ToString("O") + " " + type + ": " + message + "\n";

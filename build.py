@@ -11,6 +11,7 @@ COMMANDS = {
     'native': ('native_build.py', ['native'], 'Compile and package the unsigned program IPA'),
     'resource-zip': ('split_package.py', ['zip'], 'Archive resources for Files import'),
     'skin-zip': ('skin_package.py', [], 'Package a Custom Knight PNG skin for in-game switching'),
+    'enemy-hud-assets': ('enemy_hud_assets.py', [], 'Extract artwork from your EnemyHPBar mod into the local app'),
     'refresh-runtime': ('refresh_runtime.py', [], 'Regenerate compatibility code and matched metadata'),
     'relink': ('build_split.py', [], 'Rebuild the native launcher using cached game libraries'),
 }
