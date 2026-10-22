@@ -27,7 +27,7 @@ public static class NativeSkinCatalog
         new Sheet("Baldur", "Charm Blocker Cln", 1024, 1024),
         new Sheet("Grimm", "Grimmchild Cln", 2048, 2048),
         new Sheet("Weaver", "Weaverling Cln", 512, 1024),
-        new Sheet("Liquid", "Water_effects", 512, 1024),
+        new Sheet("Liquid", "HUD_Soulorb_fills", 512, 1024),
         new Sheet("Compass", "Compass Icon Cln", 256, 512),
         new Sheet("OrbFull", "", 130, 125),
         new Sheet("Cloak", "@Abyss_10/higher_being/Dish Plat/Knight Dummy", 1024, 1024),

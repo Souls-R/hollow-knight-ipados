@@ -43,7 +43,9 @@ public sealed class HollowKnightBootstrap : MonoBehaviour
         lock (gate)
         {
             bool error = type == LogType.Error || type == LogType.Exception || type == LogType.Assert;
-            if (!error && !NativePreferences.Diagnostics) return;
+            // Selection/repair summaries are sparse and useful even when the
+            // optional per-frame diagnostics are disabled.
+            if (!error && !NativePreferences.Diagnostics && !message.StartsWith("HK_SKIN:",StringComparison.Ordinal)) return;
             if (NativePreferences.StartupDetails) NativeDiagnosticOverlay.Add(message);
             if (bytes > 4 * 1024 * 1024) return;
             string line = DateTime.UtcNow.ToString("O") + " " + type + ": " + message + "\n";

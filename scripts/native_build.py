@@ -148,7 +148,7 @@ if __name__ == '__main__':
     for flag in ('game-data', 'ios-support', 'host-tools', 'input-system', 'resources', 'output', 'pack-output'):
         p.add_argument('--'+flag, type=Path, required=True)
     p.add_argument('--bundle-id', required=True)
-    p.add_argument('--version', default='0.2.4'); p.add_argument('--build-number', default='8')
+    p.add_argument('--version', default='0.2.5'); p.add_argument('--build-number', default='9')
     p.add_argument('--jobs', type=int, choices=range(1, 33), default=4)
     n = commands.add_parser('native'); n.add_argument('--work', type=Path, required=True)
     n.add_argument('--jobs', type=int, choices=range(1, 33), default=4)

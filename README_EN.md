@@ -108,7 +108,7 @@ python3 build.py prepare --game-data "$gameData" --host-tools "$hostTools" --ios
 
 The iOS support directory must contain `Trampoline/`, `il2cpp/`, `Variations/` and `Data/`. Host tools must contain `NetCoreRuntime/`, `DotNetSdkRoslyn/` and `MonoBleedingEdge/`. Adjust paths when using extracted installer packages.
 
-Resource conversion resumes completed files when rerun. `prepare` requires fresh native and resource-pack output directories. The default version is **0.2.4 / build 8**; change it with `--version` and `--build-number`.
+Resource conversion resumes completed files when rerun. `prepare` requires fresh native and resource-pack output directories. The default version is **0.2.5 / build 9**; change it with `--version` and `--build-number`.
 
 ### Compile and install
 
@@ -116,7 +116,7 @@ Resource conversion resumes completed files when rerun. `prepare` requires fresh
 python3 build.py native --work "$nativeOutput" --jobs 4
 ```
 
-Output: `$nativeOutput/output/HollowKnight-0.2.4-split-unsigned.ipa`. Logs: `$nativeOutput/logs/`. Subsequent builds reuse compilation caches.
+Output: `$nativeOutput/output/HollowKnight-0.2.5-split-unsigned.ipa`. Logs: `$nativeOutput/logs/`. Subsequent builds reuse compilation caches.
 
 Sign and install using your own sideloading tool.
 
@@ -171,6 +171,11 @@ Update in place with the same signing account and bundle identifier to retain sa
 | Controller | Xbox, with Menu pause and View inventory |
 
 ## Changes
+
+### 0.2.5
+
+- Restore missing health, soul and Godhome HUD frames in legacy sheets while retaining their other custom artwork.
+- Correct the Liquid atlas target and OrbFull pulse overlay; preserve the original menu's EventSystem during skin selection.
 
 ### 0.2.4
 

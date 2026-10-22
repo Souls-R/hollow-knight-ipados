@@ -18,6 +18,7 @@ public sealed class NativeSkins : MonoBehaviour
     Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
     readonly Dictionary<SpriteRenderer, Sprite> orbOriginals = new Dictionary<SpriteRenderer, Sprite>();
     readonly Dictionary<Sprite, Sprite> orbSprites = new Dictionary<Sprite, Sprite>();
+    readonly Dictionary<SpriteRenderer, bool> pulseOriginals = new Dictionary<SpriteRenderer, bool>();
     readonly List<Behaviour> blockedEvents = new List<Behaviour>();
     List<NativeSkinCatalog.Pack> packs = new List<NativeSkinCatalog.Pack>();
     string root, selected = "", status = "";
@@ -91,7 +92,9 @@ public sealed class NativeSkins : MonoBehaviour
             try {
                 byte[] png=NativeSkinCatalog.ReadPng(path,sheet);
                 tex=new Texture2D(2,2,TextureFormat.RGBA32,false);
-                if (!ImageConversion.LoadImage(tex,png,true)) throw new InvalidDataException(sheet.name+": decode failed");
+                // HUD cells are checked against the current game before the
+                // CPU copy is discarded; other sheets remain GPU-only.
+                if (!ImageConversion.LoadImage(tex,png,sheet.name!="HUD")) throw new InvalidDataException(sheet.name+": decode failed");
                 tex.name="NativeSkin/"+sheet.name;
                 tex.wrapMode=TextureWrapMode.Clamp;
                 tex.filterMode=FilterMode.Bilinear;
@@ -125,6 +128,18 @@ public sealed class NativeSkins : MonoBehaviour
     void Discover()
     {
         foreach (var collection in Resources.FindObjectsOfTypeAll<tk2dSpriteCollectionData>()) {
+            Texture2D hud;
+            if (collection.spriteCollectionName=="HUD Cln" && textures.TryGetValue("HUD",out hud) && hud.isReadable) {
+                try {
+                    int repaired=NativeHudCompatibility.Prepare(hud,collection);
+                    Debug.Log("HK_SKIN: HUD native-frame fallback="+repaired+"; atlas="+hud.width+"x"+hud.height);
+                } catch (Exception error) {
+                    // Keep gameplay indicators readable even if conversion
+                    // cannot run on this device. Other skin sheets still apply.
+                    Debug.LogWarning("HK_SKIN: HUD repair unavailable; keeping native HUD: "+error.GetType().Name);
+                    textures.Remove("HUD"); Destroy(hud);
+                }
+            }
             foreach (var sheet in NativeSkinCatalog.Sheets) {
                 if (sheet.collection.Length==0 || collection.spriteCollectionName!=sheet.collection) continue;
                 if (collection.materials==null) continue;
@@ -182,7 +197,8 @@ public sealed class NativeSkins : MonoBehaviour
             else if (customToOriginal.TryGetValue(current,out original)) sheet=originals[original];
             else continue;
             Texture2D custom;
-            Texture target=replacement!=null && replacement.TryGetValue(sheet,out custom) ? custom : original;
+            Texture target=replacement!=null && replacement.TryGetValue(sheet,out custom) &&
+                !(sheet=="HUD" && custom.isReadable) ? custom : original;
             if (target && current!=target) mat.mainTexture=target;
         }
     }
@@ -194,6 +210,10 @@ public sealed class NativeSkins : MonoBehaviour
         Texture2D orb;
         if (!textures.TryGetValue("OrbFull",out orb)) return;
         foreach (var renderer in Resources.FindObjectsOfTypeAll<SpriteRenderer>()) {
+            if (renderer.name=="Pulse Sprite" && renderer.gameObject.scene.IsValid() && !pulseOriginals.ContainsKey(renderer)) {
+                pulseOriginals.Add(renderer,renderer.enabled);
+                renderer.enabled=false;
+            }
             if (renderer.name!="Orb Full" || !renderer.gameObject.scene.IsValid() || !renderer.sprite || orbOriginals.ContainsKey(renderer)) continue;
             Sprite original=renderer.sprite, sprite;
             if (!orbSprites.TryGetValue(original,out sprite)) {
@@ -208,6 +228,8 @@ public sealed class NativeSkins : MonoBehaviour
     }
     void RestoreOrbs()
     {
+        foreach (var pair in pulseOriginals) if (pair.Key) pair.Key.enabled=pair.Value;
+        pulseOriginals.Clear();
         foreach (var pair in orbOriginals) if (pair.Key && pair.Value) pair.Key.sprite=pair.Value;
         orbOriginals.Clear();
     }
@@ -218,7 +240,9 @@ public sealed class NativeSkins : MonoBehaviour
         previousInput=InControl.InputManager.Enabled;
         InControl.InputManager.Enabled=false;
         inputHeld=true;
-        foreach (var events in Resources.FindObjectsOfTypeAll<EventSystem>())
+        // Keep EventSystem.current alive: original MenuSelectable validation
+        // coroutines still access it while the custom selector is open.
+        foreach (var events in Resources.FindObjectsOfTypeAll<BaseInputModule>())
             if (events.enabled && events.gameObject.scene.IsValid()) { blockedEvents.Add(events); events.enabled=false; }
         int index=packs.FindIndex(p=>p.id==selected);
         cursor=index+1;
