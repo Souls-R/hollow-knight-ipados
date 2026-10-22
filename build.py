@@ -10,6 +10,7 @@ COMMANDS = {
     'prepare': ('native_build.py', ['prepare'], 'Generate the split iOS project and resource folder'),
     'native': ('native_build.py', ['native'], 'Compile and package the unsigned program IPA'),
     'resource-zip': ('split_package.py', ['zip'], 'Archive resources for Files import'),
+    'skin-zip': ('skin_package.py', [], 'Package a Custom Knight PNG skin for in-game switching'),
     'refresh-runtime': ('refresh_runtime.py', [], 'Regenerate compatibility code and matched metadata'),
     'relink': ('build_split.py', [], 'Rebuild the native launcher using cached game libraries'),
 }

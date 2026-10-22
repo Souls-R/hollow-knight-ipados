@@ -33,6 +33,7 @@ public sealed class HollowKnightBootstrap : MonoBehaviour
         host.AddComponent<HollowKnightBootstrap>();
         host.AddComponent<NativeAnimatorCompatibility>();
         host.AddComponent<NativeDisplaySettings>();
+        host.AddComponent<NativeSkins>();
         if (NativePreferences.StartupDetails) host.AddComponent<NativeDiagnosticOverlay>();
         if (NativePreferences.ResourceLogs) host.AddComponent<NativePerformanceSampler>();
     }

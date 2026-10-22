@@ -23,6 +23,7 @@ python3 build.py resource-zip   Archive resources for Files import
 
 - iOS gamepad, external keyboard, and mouse input adapters.
 - DualSense / DualShock touchpad-button support.
+- Independent PNG skin packs and in-game switching; see [skin support](docs/SKINS.md).
 - Controller vibration bridge with original game settings.
 - Original display-menu resolution/frame-rate bridge and iPad aspect adaptation.
 - General Animator binding repair.
@@ -107,7 +108,7 @@ python3 build.py prepare --game-data "$gameData" --host-tools "$hostTools" --ios
 
 The iOS support directory must contain `Trampoline/`, `il2cpp/`, `Variations/` and `Data/`. Host tools must contain `NetCoreRuntime/`, `DotNetSdkRoslyn/` and `MonoBleedingEdge/`. Adjust paths when using extracted installer packages.
 
-Resource conversion resumes completed files when rerun. `prepare` requires fresh native and resource-pack output directories. The default version is **0.2.3 / build 7**; change it with `--version` and `--build-number`.
+Resource conversion resumes completed files when rerun. `prepare` requires fresh native and resource-pack output directories. The default version is **0.2.4 / build 8**; change it with `--version` and `--build-number`.
 
 ### Compile and install
 
@@ -115,7 +116,7 @@ Resource conversion resumes completed files when rerun. `prepare` requires fresh
 python3 build.py native --work "$nativeOutput" --jobs 4
 ```
 
-Output: `$nativeOutput/output/HollowKnight-0.2.3-split-unsigned.ipa`. Logs: `$nativeOutput/logs/`. Subsequent builds reuse compilation caches.
+Output: `$nativeOutput/output/HollowKnight-0.2.4-split-unsigned.ipa`. Logs: `$nativeOutput/logs/`. Subsequent builds reuse compilation caches.
 
 Sign and install using your own sideloading tool.
 
@@ -170,6 +171,10 @@ Update in place with the same signing account and bundle identifier to retain sa
 | Controller | Xbox, with Menu pause and View inventory |
 
 ## Changes
+
+### 0.2.4
+
+- Add independent Custom Knight PNG packs and a pause-menu skin selector with gamepad, keyboard and touch controls.
 
 ### 0.2.3
 

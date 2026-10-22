@@ -24,3 +24,36 @@ Python 依赖由 `requirements.txt` 指定，通过包管理器安装；其许�
 
 Python dependencies are installed separately. Their respective licenses apply.
 Artwork, fonts and icons are extracted locally from the user's purchased game.
+
+## Custom Knight
+
+皮肤 PNG 命名、角色/特效与过场替身的定位方式参考
+[HollowKnight.CustomKnight](https://github.com/PrashantMohta/HollowKnight.CustomKnight)。
+本项目独立实现本地皮肤加载、输入隔离与切换界面，不依赖其 Modding API。
+独立获取的皮肤美术由各自作者持有，作者和原始来源保留在皮肤的 `metadata.json`。
+
+Custom Knight reference license:
+
+```text
+MIT License
+
+Copyright (c) 2024 CustomKnight
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
