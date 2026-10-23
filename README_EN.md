@@ -107,7 +107,7 @@ python3 build.py prepare --game-data "$gameData" --host-tools "$hostTools" --ios
 
 The iOS support directory must contain `Trampoline/`, `il2cpp/`, `Variations/` and `Data/`. Host tools must contain `NetCoreRuntime/`, `DotNetSdkRoslyn/` and `MonoBleedingEdge/`. Adjust paths when using extracted installer packages.
 
-Resource conversion resumes completed files when rerun. `prepare` requires fresh native and resource-pack output directories. The default version is **0.2.3 / build 7**; change it with `--version` and `--build-number`.
+Resource conversion resumes completed files when rerun. `prepare` requires fresh native and resource-pack output directories. The default version is **0.2.4 / build 8**; change it with `--version` and `--build-number`.
 
 ### Compile and install
 
@@ -115,7 +115,7 @@ Resource conversion resumes completed files when rerun. `prepare` requires fresh
 python3 build.py native --work "$nativeOutput" --jobs 4
 ```
 
-Output: `$nativeOutput/output/HollowKnight-0.2.3-split-unsigned.ipa`. Logs: `$nativeOutput/logs/`. Subsequent builds reuse compilation caches.
+Output: `$nativeOutput/output/HollowKnight-0.2.4-split-unsigned.ipa`. Logs: `$nativeOutput/logs/`. Subsequent builds reuse compilation caches.
 
 Sign and install using your own sideloading tool.
 
@@ -162,14 +162,19 @@ Update in place with the same signing account and bundle identifier to retain sa
 
 | Item | Scope |
 | --- | --- |
-| Baseline | 0.2.3 / build 7 experimental version |
+| Baseline | 0.2.4 / build 8 experimental version |
 | Game | Steam macOS 1.5.12620 / Unity 6000.0.61f1 |
-| Deployment target | iOS / iPadOS 16.0 |
+| Deployment target | iOS / iPadOS 15.0 |
+| iOS 15 testing | Passed user device testing |
 | Device | 11-inch iPad Pro (2021, M1), iPadOS 26.6.2 |
 | Tested | Startup, menus, new game, opening videos, initial area, native aspect and frame-rate switching |
 | Controller | Xbox, with Menu pause and View inventory |
 
 ## Changes
+
+### 0.2.4
+
+- Lower the minimum deployment target to iOS / iPadOS 15.0, verified by user device testing.
 
 ### 0.2.3
 

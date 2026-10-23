@@ -111,7 +111,7 @@ python3 build.py prepare --game-data "$gameData" --host-tools "$hostTools" --ios
 
 `iosSupport` 应包含 `Trampoline/`、`il2cpp/`、`Variations/` 和 `Data/`；`hostTools` 应包含 `NetCoreRuntime/`、`DotNetSdkRoslyn/` 和 `MonoBleedingEdge/`。如由安装包提取工具链，请把变量指向对应目录。
 
-资源转换支持继续运行同一命令，复用已完成的文件。`prepare` 要求尚不存在的原生工程和资源包输出目录；重新生成时选新目录。默认版本为 **0.2.3 / build 7**，可用 `--version`、`--build-number` 修改。
+资源转换支持继续运行同一命令，复用已完成的文件。`prepare` 要求尚不存在的原生工程和资源包输出目录；重新生成时选新目录。默认版本为 **0.2.4 / build 8**，可用 `--version`、`--build-number` 修改。
 
 ### 编译与签名安装
 
@@ -119,7 +119,7 @@ python3 build.py prepare --game-data "$gameData" --host-tools "$hostTools" --ios
 python3 build.py native --work "$nativeOutput" --jobs 4
 ```
 
-IPA 位于 `$nativeOutput/output/HollowKnight-0.2.3-split-unsigned.ipa`，构建日志在 `$nativeOutput/logs/`。再次执行会复用编译缓存。
+IPA 位于 `$nativeOutput/output/HollowKnight-0.2.4-split-unsigned.ipa`，构建日志在 `$nativeOutput/logs/`。再次执行会复用编译缓存。
 
 使用自己的侧载工具签名安装。
 
@@ -166,14 +166,19 @@ Documents/
 
 | 项目 | 当前范围 |
 | --- | --- |
-| 基线版本 | 0.2.3 / build 7 测试版 |
+| 基线版本 | 0.2.4 / build 8 测试版 |
 | 原游戏 | Steam macOS 1.5.12620 / Unity 6000.0.61f1 |
-| 最低部署目标 | iOS / iPadOS 16.0 |
+| 最低部署目标 | iOS / iPadOS 15.0 |
+| iOS 15 实测 | 已通过用户实机测试 |
 | 实测设备 | iPad Pro 11 英寸（2021，M1），iPadOS 26.6.2 |
 | 已实测 | 启动、主菜单、新游戏、开场视频、初始关卡、原生画幅、帧率切换 |
 | 手柄 | Xbox，支持 Menu 暂停和 View 背包 |
 
 ## 更新说明
+
+### 0.2.4
+
+- 最低部署目标降至 iOS / iPadOS 15.0，已通过用户实机测试。
 
 ### 0.2.3
 
