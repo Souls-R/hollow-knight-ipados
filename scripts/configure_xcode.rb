@@ -14,14 +14,14 @@ p.targets.select { |t| t.name.include?('Tests') }.each(&:remove_from_project)
 p.files.select { |f| f.path == 'libGameAssembly.a' }.each { |f| f.path = 'Libraries/libGameAssembly.a'; f.source_tree = 'SOURCE_ROOT' }
 p.build_configurations.each do |c|
   c.build_settings['PRODUCT_NAME_APP'] = 'Unity-iPhone'
-  c.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
+  c.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
 end
 p.targets.each do |t|
   t.build_configurations.each do |c|
     b = c.build_settings
     b['CODE_SIGNING_ALLOWED'] = 'NO'
     b['CODE_SIGNING_REQUIRED'] = 'NO'
-    b['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
+    b['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
     b['ARCHS'] = 'arm64'
     b['ENABLE_BITCODE'] = 'NO'
     b['ENABLE_USER_SCRIPT_SANDBOXING'] = 'NO'

@@ -33,7 +33,7 @@ docs/                     构建说明
 只改 `.mm` / `.h` 或打包设置时：
 
 ```sh
-python3 build.py relink --work "$nativeOutput" --version 0.2.6 --build-number 11
+python3 build.py relink --work "$nativeOutput" --version 0.2.7 --build-number 12
 ```
 
 这会同步原生源文件、调用 Xcode 并重打 IPA，复用原有游戏代码库。

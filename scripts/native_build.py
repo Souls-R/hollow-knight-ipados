@@ -39,8 +39,10 @@ def patch_generated(cpp):
     from patch_runtime_diagnostics import apply as diagnostics
     from patch_media_paths import apply as media_paths
     from patch_enemy_hud import apply as enemy_hud
+    from patch_controller_identity import apply as controller_identity
     patches = dict(animator=animator(cpp), hollow_knight=compatibility(cpp),
-                   diagnostics=diagnostics(cpp), media_paths=media_paths(cpp), enemy_hud=enemy_hud(cpp))
+                   diagnostics=diagnostics(cpp), media_paths=media_paths(cpp), enemy_hud=enemy_hud(cpp),
+                   controller_identity=controller_identity(cpp))
     pattern = re.compile(r'IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void DefaultContractResolver_GetCallbackMethodsForType_[^(]+\([^\n]+\)\s*\n\{')
     matches = [(p, m) for p in cpp.glob('Newtonsoft.Json*.cpp') for m in pattern.finditer(p.read_text(encoding='utf-8'))]
     assert len(matches) == 1
@@ -149,7 +151,7 @@ if __name__ == '__main__':
     for flag in ('game-data', 'ios-support', 'host-tools', 'input-system', 'resources', 'output', 'pack-output'):
         p.add_argument('--'+flag, type=Path, required=True)
     p.add_argument('--bundle-id', required=True)
-    p.add_argument('--version', default='0.2.6'); p.add_argument('--build-number', default='10')
+    p.add_argument('--version', default='0.2.7'); p.add_argument('--build-number', default='11')
     p.add_argument('--jobs', type=int, choices=range(1, 33), default=4)
     n = commands.add_parser('native'); n.add_argument('--work', type=Path, required=True)
     n.add_argument('--jobs', type=int, choices=range(1, 33), default=4)
