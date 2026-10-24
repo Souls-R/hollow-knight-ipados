@@ -38,8 +38,10 @@ def patch_generated(cpp):
     from patch_hollow_knight import apply as compatibility
     from patch_runtime_diagnostics import apply as diagnostics
     from patch_media_paths import apply as media_paths
+    from patch_controller_identity import apply as controller_identity
     patches = dict(animator=animator(cpp), hollow_knight=compatibility(cpp),
-                   diagnostics=diagnostics(cpp), media_paths=media_paths(cpp))
+                   diagnostics=diagnostics(cpp), media_paths=media_paths(cpp),
+                   controller_identity=controller_identity(cpp))
     pattern = re.compile(r'IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void DefaultContractResolver_GetCallbackMethodsForType_[^(]+\([^\n]+\)\s*\n\{')
     matches = [(p, m) for p in cpp.glob('Newtonsoft.Json*.cpp') for m in pattern.finditer(p.read_text(encoding='utf-8'))]
     assert len(matches) == 1
@@ -148,7 +150,7 @@ if __name__ == '__main__':
     for flag in ('game-data', 'ios-support', 'host-tools', 'input-system', 'resources', 'output', 'pack-output'):
         p.add_argument('--'+flag, type=Path, required=True)
     p.add_argument('--bundle-id', required=True)
-    p.add_argument('--version', default='0.2.4'); p.add_argument('--build-number', default='8')
+    p.add_argument('--version', default='0.2.5'); p.add_argument('--build-number', default='9')
     p.add_argument('--jobs', type=int, choices=range(1, 33), default=4)
     n = commands.add_parser('native'); n.add_argument('--work', type=Path, required=True)
     n.add_argument('--jobs', type=int, choices=range(1, 33), default=4)
