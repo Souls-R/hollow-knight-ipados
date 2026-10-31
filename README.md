@@ -115,7 +115,7 @@ python3 build.py prepare --game-data "$gameData" --host-tools "$hostTools" --ios
 
 `iosSupport` 应包含 `Trampoline/`、`il2cpp/`、`Variations/` 和 `Data/`；`hostTools` 应包含 `NetCoreRuntime/`、`DotNetSdkRoslyn/` 和 `MonoBleedingEdge/`。如由安装包提取工具链，请把变量指向对应目录。
 
-资源转换支持继续运行同一命令，复用已完成的文件。`prepare` 要求尚不存在的原生工程和资源包输出目录；重新生成时选新目录。默认版本为 **0.2.10 / build 14**，可用 `--version`、`--build-number` 修改。
+资源转换支持继续运行同一命令，复用已完成的文件。`prepare` 要求尚不存在的原生工程和资源包输出目录；重新生成时选新目录。默认版本为 **0.2.11 / build 15**，可用 `--version`、`--build-number` 修改。
 
 ### 编译与签名安装
 
@@ -123,7 +123,7 @@ python3 build.py prepare --game-data "$gameData" --host-tools "$hostTools" --ios
 python3 build.py native --work "$nativeOutput" --jobs 4
 ```
 
-IPA 位于 `$nativeOutput/output/HollowKnight-0.2.10-split-unsigned.ipa`，构建日志在 `$nativeOutput/logs/`。再次执行会复用编译缓存。
+IPA 位于 `$nativeOutput/output/HollowKnight-0.2.11-split-unsigned.ipa`，构建日志在 `$nativeOutput/logs/`。再次执行会复用编译缓存。
 
 使用自己的侧载工具签名安装。
 
@@ -178,6 +178,14 @@ Documents/
 | 手柄 | Xbox，支持 Menu 暂停和 View 背包 |
 
 ## 更新说明
+
+### 0.2.11（内置 Mod 分支）
+
+- 手柄 Debug 快捷键默认关闭，避免与冲刺等游戏输入冲突；可选择开启或清除旧绑定。
+- 修复 Debug 重绑定时修改字典的异常，隔离命令面板输入与下层游戏菜单。
+- 中文提示使用系统字体并按每页 11 项分页；支持执行附加 Mod 命令。
+- 增加恢复正常时间、关闭调试鼠标的入口，修复未激活菜单的协程调用。
+- 无预载请求时保留当前主菜单，减少启动与退出时的无效场景访问。
 
 ### 0.2.10（内置 Mod 分支）
 

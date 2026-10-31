@@ -47,5 +47,20 @@ static class FeatureInventory
         var entry=startup.Methods.Single(m=>m.Name=="Awake").Body.Instructions.First();
         if(entry.Operand is not MethodReference call||call.FullName!=installer.FullName)throw new InvalidOperationException("Startup must install a typed language callback before original Awake");
         Console.WriteLine("StartManager: exact native language delegate installed before game initialization");
+        var gui=after.MainModule.GetType("DebugMod.GUIController");
+        MethodReference[] Calls(MethodDefinition m)=>m.Body.Instructions.Select(i=>i.Operand).OfType<MethodReference>().ToArray();
+        void Require(bool condition,string message){if(!condition)throw new InvalidOperationException(message);}
+        var update=Calls(gui.Methods.Single(m=>m.Name=="Update"));
+        Require(update.Count(m=>m.Name=="SnapshotBindings")==1,"Debug binding iteration must use exactly one snapshot");
+        Require(update.Any(m=>m.Name=="BindingOrNone")&&update.Any(m=>m.Name=="BeforeUpdate"),"Debug update must guard focus and missing master bindings");
+        Require(!Types(after.MainModule.Types).SelectMany(t=>t.Methods).Where(m=>m.HasBody).SelectMany(Calls).Any(m=>m.DeclaringType.FullName=="NativeModpack.LegacyInput"&&m.Name=="GetKeyDown"),"Debug shortcut calls must use the controller opt-in gate");
+        Require(Calls(gui.Methods.Single(m=>m.Name=="BuildMenus")).Any(m=>m.Name=="ConfigureFonts"),"Debug must configure Chinese fonts before creating labels");
+        var keyPanel=after.MainModule.GetType("DebugMod.KeyBindPanel");
+        Require(Calls(keyPanel.Methods.Single(m=>m.Name=="UpdateHelpText")).Any(m=>m.Name=="PaginateHelp"),"Debug help must paginate before rendering");
+        Require(Calls(keyPanel.Methods.Single(m=>m.Name=="RunBind")).Any(m=>m.Name=="RunHelpCommand"),"Debug help must support additional mod commands");
+        Require(!after.MainModule.Types.Where(t=>t.Namespace=="DebugMod.Canvas").SelectMany(t=>t.Methods).Where(m=>m.HasBody).SelectMany(Calls).Any(m=>m.Name=="DontDestroyOnLoad"),"Debug child objects must follow the persistent root");
+        foreach(var (type,method) in new[]{("MenuButtonList","DoSelect"),("PromptMarker","Hide")})
+        {var calls=Calls(game.MainModule.GetType(type).Methods.Single(m=>m.Name==method));Require(calls.Any(m=>m.Name=="StartWhenActive")&&!calls.Any(m=>m.Name=="StartCoroutine"),"Inactive UI coroutine guard missing: "+type);}
+        Console.WriteLine("Debug UI: controller gate, snapshot, Chinese fonts, pagination and inactive menu guards verified");
     }
 }

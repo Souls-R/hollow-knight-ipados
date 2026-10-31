@@ -56,6 +56,8 @@ namespace NativeModpack
             Dictionary<ModLoader.ModInstance,Dictionary<string,Dictionary<string,GameObject>>> objects,
             Dictionary<string,List<Func<IEnumerator>>> hooks)
         {
+            if(requests.Count==0&&hooks.Count==0)
+            {ModLoader.LoadState|=ModLoader.ModLoadState.Preloaded;yield break;}
             AudioListener.pause=true;
             try
             {

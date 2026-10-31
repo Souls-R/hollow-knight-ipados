@@ -16,6 +16,7 @@ if(args[0]=="legacy-compat") { NativeLegacyCompat.Build(root); return; }
 if(args[0]=="static-loader") { StaticLoader.Build(root); return; }
 if(args[0]=="finalize") { NativeFinalize.Build(root); return; }
 if(args[0]=="input-adapters") { NativeInputAdapters.Build(root); return; }
+if(args[0]=="debug-ui") { DebugUiAdapters.Build(root); return; }
 if(args[0]=="scoped-types") {
     foreach(var file in Directory.GetFiles(Path.Combine(root,"native-stage"),"*.dll").Where(p=>!Path.GetFileName(p).StartsWith("MMHOOK_Team"))){
         using var asm=AssemblyDefinition.ReadAssembly(file);

@@ -9,6 +9,13 @@ namespace NativeModpack
         static readonly byte[] current=new byte[256],previous=new byte[256];
         static int frame=-1;
         static bool connected;
+        static bool? controllerShortcuts;
+        public static bool ControllerShortcuts
+        {
+            get {if(!controllerShortcuts.HasValue)controllerShortcuts=PlayerPrefs.GetInt("NativeDebugControllerShortcuts",0)!=0;return controllerShortcuts.Value;}
+            set {controllerShortcuts=value;PlayerPrefs.SetInt("NativeDebugControllerShortcuts",value?1:0);PlayerPrefs.Save();}
+        }
+        public static bool HardwareKeyboardPresent {get {Read();return connected;}}
         [DllImport("__Internal")] static extern int NativeKeyboard_CopyState(IntPtr destination,int length);
         static unsafe void Read()
         {
@@ -44,12 +51,14 @@ namespace NativeModpack
             if((int)key>=323&&(int)key<=329)
             {
                 var mouse=InControl.InputManager.MouseProvider;
-                if(mouse!=null&&mouse.HasMousePresent())return mouse.GetButtonWasPressed((InControl.Mouse)((int)key-323+1));
+                if(mouse!=null&&mouse.HasMousePresent())return mouse.GetButtonWasPressed((InControl.Mouse)DebugPolicy.MouseButton((int)key));
             }
             Read();int usage=Usage((int)key);
             if(connected&&usage!=0)return current[usage]!=0&&previous[usage]==0;
             return Input.GetKeyDown(key);
         }
+        public static bool DebugGetKeyDown(KeyCode key)
+        {return DebugPolicy.AcceptKey((int)key,ControllerShortcuts)&&GetKeyDown(key);}
         public static Vector3 MousePosition()
         {
             var mouse=InControl.InputManager.MouseProvider;

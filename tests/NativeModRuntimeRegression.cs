@@ -21,6 +21,21 @@ static class NativeModRuntimeRegression
     {if(!condition)throw new Exception(name);checks++;Console.WriteLine("PASS "+name);}
     static int Main()
     {
+        Check(!DebugPolicy.AcceptKey(339,false)&&DebugPolicy.AcceptKey(339,true),"saved RB debug shortcuts require explicit opt-in");
+        Check(DebugPolicy.AcceptKey(97,false)&&!DebugPolicy.AcceptKey(0,true),"keyboard commands remain available and None never triggers");
+        Check(DebugPolicy.MouseButton(323)==1&&DebugPolicy.MouseButton(326)==10&&DebugPolicy.MouseButton(329)==13,"legacy side mouse buttons map to InControl indices");
+        var bindings=new System.Collections.Generic.Dictionary<string,int>{{"freeze",339},{"capture",0}};
+        int visited=0;foreach(var binding in DebugPolicy.SnapshotBindings(bindings)){bindings.Remove(binding.Key);visited++;}
+        Check(visited==2&&bindings.Count==0,"rebinding can mutate settings without invalidating iteration");
+        Check(DebugPolicy.BindingOrNone(bindings,"Toggle All UI")==int.MinValue,"unbinding the master UI shortcut is safe");
+        var names=new System.Collections.Generic.List<string>();for(int i=0;i<132;i++)names.Add("command"+i);
+        var pages=BindingPages.Create(new System.Collections.Generic.Dictionary<string,System.Collections.Generic.List<string>>{{"Debug",names}},new System.Collections.Generic.List<string>{"Debug"},new System.Collections.Generic.Dictionary<string,string>(),0,11);
+        Check(pages.keys.Count==12&&pages.pages[pages.keys[11]].Count==11,"help paginates all 132 commands into visible rows");
+        var again=BindingPages.Create(pages.pages,pages.keys,pages.owners,9,11);
+        Check(again.keys.Count==12&&again.selected==9,"repeated help updates preserve pagination and selection");
+        again.pages.Add("Debug",new System.Collections.Generic.List<string>{"additional"});again.keys.Add("Debug");
+        var extended=BindingPages.Create(again.pages,again.keys,again.owners,9,11);
+        Check(extended.keys.Count==13&&extended.pages[extended.keys[12]][0]=="additional","late registered mod commands remain accessible");
         var originalCounter=typeof(GameManager).GetField("timeSlowedCount",BindingFlags.NonPublic|BindingFlags.Instance);
         Check(originalCounter!=null&&originalCounter.IsPrivate&&!Attribute.IsDefined(originalCounter,typeof(UnityEngine.SerializeField)),"game time counter preserves its original private nonserialized scene layout");
         var countAccessor=typeof(GameManager).GetMethod("NativeTimeSlowedCountRef",BindingFlags.Public|BindingFlags.Static);
