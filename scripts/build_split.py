@@ -71,7 +71,7 @@ with zipfile.ZipFile(temporary) as archive:
     contract = json.loads(archive.read(prefix+'HollowKnightResourceContract.json'))
     assert contract['compatibility']==manifest['resource_contract']['compatibility']
 temporary.replace(ipa)
-manifest.update(native_built=True,ipa=str(ipa),ipa_bytes=ipa.stat().st_size,
+manifest.update(native_built=True,embedded_resource_support=True,ipa=str(ipa),ipa_bytes=ipa.stat().st_size,
                 last_build_seconds=round(time.monotonic()-started,2),device_verified=False)
 write(work/'build.json',manifest)
 print('SPLIT_IPA='+str(ipa),flush=True)

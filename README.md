@@ -6,6 +6,8 @@
 
 从你自己购买的 Steam macOS 版游戏开始，将托管程序集通过 Unity IL2CPP 转换为 C++，编译为 ARM64，并使用 Unity 的 iOS 原生运行时和 Metal 渲染。采用 IPA + 外置资源包，方便覆盖更新和迭代。
 
+本分支也支持将 Any Radiance 1、Debug、QoL、寻神者+与游戏资源一起编入完整 IPA，见 [内置 Mod 说明](docs/MODPACK.md)。
+
 仓库仅包含适配代码和构建工具，不包含游戏程序集、资源、Unity 运行时或已签名程序。请自行准备正版游戏和工具链。
 
 ## 开始构建
@@ -113,7 +115,7 @@ python3 build.py prepare --game-data "$gameData" --host-tools "$hostTools" --ios
 
 `iosSupport` 应包含 `Trampoline/`、`il2cpp/`、`Variations/` 和 `Data/`；`hostTools` 应包含 `NetCoreRuntime/`、`DotNetSdkRoslyn/` 和 `MonoBleedingEdge/`。如由安装包提取工具链，请把变量指向对应目录。
 
-资源转换支持继续运行同一命令，复用已完成的文件。`prepare` 要求尚不存在的原生工程和资源包输出目录；重新生成时选新目录。默认版本为 **0.2.7 / build 11**，可用 `--version`、`--build-number` 修改。
+资源转换支持继续运行同一命令，复用已完成的文件。`prepare` 要求尚不存在的原生工程和资源包输出目录；重新生成时选新目录。默认版本为 **0.2.8 / build 12**，可用 `--version`、`--build-number` 修改。
 
 ### 编译与签名安装
 
@@ -121,7 +123,7 @@ python3 build.py prepare --game-data "$gameData" --host-tools "$hostTools" --ios
 python3 build.py native --work "$nativeOutput" --jobs 4
 ```
 
-IPA 位于 `$nativeOutput/output/HollowKnight-0.2.7-split-unsigned.ipa`，构建日志在 `$nativeOutput/logs/`。再次执行会复用编译缓存。
+IPA 位于 `$nativeOutput/output/HollowKnight-0.2.8-split-unsigned.ipa`，构建日志在 `$nativeOutput/logs/`。再次执行会复用编译缓存。
 
 使用自己的侧载工具签名安装。
 
@@ -176,6 +178,12 @@ Documents/
 | 手柄 | Xbox，支持 Menu 暂停和 View 背包 |
 
 ## 更新说明
+
+### 0.2.8（内置 Mod 分支）
+
+- Any Radiance 1、Debug、QoL 和寻神者+参与 iOS 提前编译，保留原版命令与模块。
+- Debug 增加暂停时的触摸及手柄命令入口，适配硬件键鼠。
+- 支持将游戏与 Mod 资源放入单个 IPA；保留皮肤切换与原生怪物血条。
 
 ### 0.2.7
 

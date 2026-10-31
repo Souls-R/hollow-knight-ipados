@@ -51,7 +51,8 @@ BOOL HKPrepareResourceOverlay(NSString* app, NSString* documents, NSString* runt
     if (![contract[@"schema"] isEqual:@1] || ![contract[@"folder"] isEqual:@"HollowKnightResources-v1"] ||
         ![contract[@"files"] isKindOfClass:NSArray.class] || ![contract[@"compatibility"] isKindOfClass:NSString.class])
         return Fail(reason, @"应用资源配置无效，请重新安装程序包。");
-    NSString* pack = [documents stringByAppendingPathComponent:contract[@"folder"]];
+    BOOL embedded = [contract[@"embedded"] isEqual:@YES];
+    NSString* pack = [(embedded ? app : documents) stringByAppendingPathComponent:contract[@"folder"]];
     NSDictionary* packAttrs = [fm attributesOfItemAtPath:pack error:NULL];
     if (![packAttrs[NSFileType] isEqual:NSFileTypeDirectory])
         return Fail(reason, @"尚未找到资源。请把 HollowKnightResources-v1 文件夹放入本应用的文件夹。");
@@ -106,7 +107,7 @@ BOOL HKPrepareResourceOverlay(NSString* app, NSString* documents, NSString* runt
     [fm removeItemAtPath:runtime error:NULL];
     if (![fm moveItemAtPath:temporary toPath:runtime error:&error]) return Fail(reason, @"无法准备资源加载目录。");
     [[NSURL fileURLWithPath:runtime] setResourceValue:@YES forKey:NSURLIsExcludedFromBackupKey error:NULL];
-    [[NSURL fileURLWithPath:pack] setResourceValue:@YES forKey:NSURLIsExcludedFromBackupKey error:NULL];
+    if (!embedded) [[NSURL fileURLWithPath:pack] setResourceValue:@YES forKey:NSURLIsExcludedFromBackupKey error:NULL];
     if (reason) *reason = nil;
     return YES;
 }

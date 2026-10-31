@@ -76,6 +76,21 @@ shutil.copytree(app,updated)
 check('app update refreshes code links without importing resources',True,updated)
 assert (runtime/'Data/Managed/Metadata/global-metadata.dat').read_text()=='CODE-V2'
 assert (runtime/'Data/level0').read_text()=='SCENE'
+embedded = temporary / 'App embedded'
+shutil.copytree(app,embedded)
+shutil.copytree(pack,embedded/'HollowKnightResources-v1')
+save(embedded/'HollowKnightResourceContract.json',dict(contract,embedded=True))
+# The bundled mode must work without external resources and ignore a broken
+# external pack. Its links must refresh when signing changes the app path.
+pack.rename(docs/'external-pack-hidden')
+check('embedded resources work without an external pack',True,embedded)
+assert (runtime/'Data/level0').resolve()==(embedded/'HollowKnightResources-v1/Data/level0').resolve()
+reinstalled = temporary / 'App embedded new container'
+shutil.copytree(embedded,reinstalled)
+check('embedded app update refreshes resource links',True,reinstalled)
+assert (runtime/'Data/level0').resolve()==(reinstalled/'HollowKnightResources-v1/Data/level0').resolve()
+(embedded/'HollowKnightResources-v1/Data/level0').unlink()
+check('incomplete embedded resources are blocked',False,embedded)
 report = dict(passed=passed,count=len(passed),implementation='actual Foundation layer',device_verified=False)
 print(json.dumps(report,indent=2))
 shutil.rmtree(temporary)

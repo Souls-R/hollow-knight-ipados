@@ -14,6 +14,9 @@ COMMANDS = {
     'enemy-hud-assets': ('enemy_hud_assets.py', [], 'Extract artwork from your EnemyHPBar mod into the local app'),
     'refresh-runtime': ('refresh_runtime.py', [], 'Regenerate compatibility code and matched metadata'),
     'relink': ('build_split.py', [], 'Rebuild the native launcher using cached game libraries'),
+    'bundle-ipa': ('bundle_ipa.py', [], 'Package the program and existing resources into one IPA'),
+    'modpack-stage': ('modpack_stage.py', ['build'], 'Compile the supported Mods into native-compatible assemblies'),
+    'modpack-install': ('modpack_stage.py', ['install'], 'Install the staged native Mods into a prepared work directory'),
 }
 
 def main():

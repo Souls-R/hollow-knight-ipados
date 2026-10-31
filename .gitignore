@@ -17,6 +17,8 @@
 !/src/runtime/*.cs
 !/src/runtime/*.mm
 !/src/runtime/*.h
+!/src/modpack/
+!/src/modpack/*.cs
 !/src/launch/
 !/src/launch/strings.json
 !/tests/
@@ -25,6 +27,10 @@
 !/tests/*.cpp
 !/docs/
 !/docs/*.md
+!/tools/
+!/tools/NativeModpackPort/
+!/tools/NativeModpackPort/*.cs
+!/tools/NativeModpackPort/*.csproj
 !/.github/
 /.github/*
 !/.github/ISSUE_TEMPLATE/

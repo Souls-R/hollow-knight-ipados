@@ -1,5 +1,7 @@
 # Hollow Knight iPadOS
 
+This branch supports a bundled IPA with Any Radiance 1, Debug, QoL, GodSeekerPlus and native enemy health bars. Game and Mod code is compiled ahead of time for iOS; see [the Mod pack guide](docs/MODPACK.md).
+
 [简体中文](README.md) · English
 
 Unofficial native iPadOS build tools for the original **Hollow Knight**.
@@ -109,7 +111,7 @@ python3 build.py prepare --game-data "$gameData" --host-tools "$hostTools" --ios
 
 The iOS support directory must contain `Trampoline/`, `il2cpp/`, `Variations/` and `Data/`. Host tools must contain `NetCoreRuntime/`, `DotNetSdkRoslyn/` and `MonoBleedingEdge/`. Adjust paths when using extracted installer packages.
 
-Resource conversion resumes completed files when rerun. `prepare` requires fresh native and resource-pack output directories. The default version is **0.2.7 / build 11**; change it with `--version` and `--build-number`.
+Resource conversion resumes completed files when rerun. `prepare` requires fresh native and resource-pack output directories. The default version is **0.2.8 / build 12**; change it with `--version` and `--build-number`.
 
 ### Compile and install
 
@@ -117,7 +119,7 @@ Resource conversion resumes completed files when rerun. `prepare` requires fresh
 python3 build.py native --work "$nativeOutput" --jobs 4
 ```
 
-Output: `$nativeOutput/output/HollowKnight-0.2.7-split-unsigned.ipa`. Logs: `$nativeOutput/logs/`. Subsequent builds reuse compilation caches.
+Output: `$nativeOutput/output/HollowKnight-0.2.8-split-unsigned.ipa`. Logs: `$nativeOutput/logs/`. Subsequent builds reuse compilation caches.
 
 Sign and install using your own sideloading tool.
 

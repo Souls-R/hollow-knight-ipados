@@ -32,6 +32,12 @@ Artwork, fonts and icons are extracted locally from the user's purchased game.
 本仓库独立实现原生生命值观察、界面与开关，不分发或加载该桌面 DLL 及其 BepInEx/Harmony 依赖。
 可选默认美术从用户自己的 Mod ZIP 只读提取到本地构建目录；美术属于原权利人，不包含在源码仓库中，也不适用本仓库 MIT 许可。
 
+## Native Mod pack
+
+本分支的离线适配工具使用用户独立提供的 Hollow Knight Modding API、Any Radiance 1、DebugMod、QoL、GodSeekerPlus，以及 Satchel、Osmi、Vasi 作为本地构建输入。相关 Mod 的逻辑随游戏通过 IL2CPP 提前编译，原生 Hook 调用链和兼容层由本项目实现。
+
+这些第三方 DLL、其反编译源码和所含美术不在本源码仓库分发；各自许可不因本项目的 MIT 许可而改变。获取来源、匹配版本和构建方式见 [内置 Mod 说明](docs/MODPACK.md)。
+
 ## Custom Knight
 
 皮肤 PNG 命名、角色/特效与过场替身的定位方式参考
