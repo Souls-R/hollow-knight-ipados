@@ -24,6 +24,19 @@ namespace MonoMod.Utils
     }
     public static class ReflectionBridge
     {
+        static object ConvertValue(object value,Type target)
+        {
+            if(value==null||target.IsInstanceOfType(value))return value;
+            var source=value as Delegate;
+            if(source!=null&&typeof(Delegate).IsAssignableFrom(target))
+            {
+                Delegate converted=null;
+                foreach(var entry in source.GetInvocationList())
+                    converted=Delegate.Combine(converted,Delegate.CreateDelegate(target,entry.Target,entry.Method,true));
+                return converted;
+            }
+            return value;
+        }
         static readonly Dictionary<Tuple<MemberInfo,Type,Type,int>,Delegate> cache=new Dictionary<Tuple<MemberInfo,Type,Type,int>,Delegate>();
         static Delegate Cached(MemberInfo member,Type owner,Type value,int kind,Func<Delegate> create)
         {
@@ -31,27 +44,27 @@ namespace MonoMod.Utils
             lock(cache) {Delegate found;if(cache.TryGetValue(key,out found))return found;return cache[key]=create();}
         }
         public static Delegate GetInstanceFieldGetter<TType,TField>(FieldInfo field)
-        {return Cached(field,typeof(TType),typeof(TField),0,()=>new Func<TType,TField>(obj=>(TField)field.GetValue(obj)));}
+        {return Cached(field,typeof(TType),typeof(TField),0,()=>new Func<TType,TField>(obj=>(TField)ConvertValue(field.GetValue(obj),typeof(TField))));}
         public static Delegate GetStaticFieldGetter<TField>(FieldInfo field)
-        {return Cached(field,typeof(object),typeof(TField),1,()=>new Func<TField>(()=>(TField)field.GetValue(null)));}
+        {return Cached(field,typeof(object),typeof(TField),1,()=>new Func<TField>(()=>(TField)ConvertValue(field.GetValue(null),typeof(TField))));}
         public static Delegate GetInstanceFieldSetter<TType,TField>(FieldInfo field)
         {
             if(field.IsLiteral||field.IsInitOnly)throw new ArgumentException("Field cannot be readonly or const");
-            return Cached(field,typeof(TType),typeof(TField),2,()=>new Action<TType,TField>((obj,value)=>field.SetValue(obj,value)));
+            return Cached(field,typeof(TType),typeof(TField),2,()=>new Action<TType,TField>((obj,value)=>field.SetValue(obj,ConvertValue(value,field.FieldType))));
         }
         public static Delegate GetStaticFieldSetter<TField>(FieldInfo field)
         {
             if(field.IsLiteral||field.IsInitOnly)throw new ArgumentException("Field cannot be readonly or const");
-            return Cached(field,typeof(object),typeof(TField),3,()=>new Action<TField>(value=>field.SetValue(null,value)));
+            return Cached(field,typeof(object),typeof(TField),3,()=>new Action<TField>(value=>field.SetValue(null,ConvertValue(value,field.FieldType))));
         }
         public static Delegate GetInstancePropertyGetter<TType,TValue>(PropertyInfo property)
-        {return Cached(property,typeof(TType),typeof(TValue),4,()=>new Func<TType,TValue>(obj=>(TValue)property.GetValue(obj,null)));}
+        {return Cached(property,typeof(TType),typeof(TValue),4,()=>new Func<TType,TValue>(obj=>(TValue)ConvertValue(property.GetValue(obj,null),typeof(TValue))));}
         public static Delegate GetStaticPropertyGetter<TValue>(PropertyInfo property)
-        {return Cached(property,typeof(object),typeof(TValue),5,()=>new Func<TValue>(()=>(TValue)property.GetValue(null,null)));}
+        {return Cached(property,typeof(object),typeof(TValue),5,()=>new Func<TValue>(()=>(TValue)ConvertValue(property.GetValue(null,null),typeof(TValue))));}
         public static Delegate GetInstancePropertySetter<TType,TValue>(PropertyInfo property)
-        {return Cached(property,typeof(TType),typeof(TValue),6,()=>new Action<TType,TValue>((obj,value)=>property.SetValue(obj,value,null)));}
+        {return Cached(property,typeof(TType),typeof(TValue),6,()=>new Action<TType,TValue>((obj,value)=>property.SetValue(obj,ConvertValue(value,property.PropertyType),null)));}
         public static Delegate GetStaticPropertySetter<TValue>(PropertyInfo property)
-        {return Cached(property,typeof(object),typeof(TValue),7,()=>new Action<TValue>(value=>property.SetValue(null,value,null)));}
+        {return Cached(property,typeof(object),typeof(TValue),7,()=>new Action<TValue>(value=>property.SetValue(null,ConvertValue(value,property.PropertyType),null)));}
     }
     public static class Extensions
     {

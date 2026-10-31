@@ -58,4 +58,6 @@ python3 build.py bundle-ipa --work /path/to/native-modpack \
 
 更新 Mod 输入后使用新的 Mod 工作目录。转换后的代码与元数据必须成对重新编译；不可只替换旧 IPA 的元数据。现有游戏资源目录直接复用，不重复转换或解压。
 
+完整 IPA 迭代时，可给 `bundle-ipa` 加上 `--base-ipa /path/to/previous-full.ipa`，复用资源完全相同的上一版归档，只重新压缩程序文件。
+
 仓库只提供自有适配和构建代码，不分发上述 DLL、原游戏资源或第三方反编译源码。独立获取的组件仍适用各自许可。

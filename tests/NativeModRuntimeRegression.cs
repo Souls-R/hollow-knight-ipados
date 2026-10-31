@@ -5,6 +5,7 @@ using MonoMod.Utils;
 
 static class NativeModRuntimeRegression
 {
+    sealed class CallbackHolder {public static TeamCherry.Localization.Language.LanguageGetFunc LanguageGet=null;}
     sealed class Sample
     {
         int hidden=3;
@@ -20,6 +21,19 @@ static class NativeModRuntimeRegression
     {if(!condition)throw new Exception(name);checks++;Console.WriteLine("PASS "+name);}
     static int Main()
     {
+        var languageField=typeof(CallbackHolder).GetField("LanguageGet");
+        var setLanguage=(Action<Func<string,string,string>>)ReflectionBridge.GetStaticFieldSetter<Func<string,string,string>>(languageField);
+        int languageCalls=0;
+        Func<string,string,string> callbacks=(key,sheet)=>{languageCalls++;return "first";};
+        callbacks+=(key,sheet)=>{languageCalls++;return key+"/"+sheet;};
+        setLanguage(callbacks);
+        Check(CallbackHolder.LanguageGet("title","menu")=="title/menu"&&languageCalls==2,"language callback adapts Func to the game's delegate and preserves multicast order");
+        var getLanguage=(Func<Func<string,string,string>>)ReflectionBridge.GetStaticFieldGetter<Func<string,string,string>>(languageField);
+        Check(getLanguage()("start","menu")=="start/menu","delegate fields can be read through a compatible Func signature");
+        setLanguage(null);Check(CallbackHolder.LanguageGet==null,"language callback can be cleared");
+        bool incompatibleRejected=false;
+        try {((Action<Action>)ReflectionBridge.GetStaticFieldSetter<Action>(languageField))(()=>{});}catch(ArgumentException){incompatibleRejected=true;}
+        Check(incompatibleRejected,"incompatible delegate signatures are rejected");
         int debugCommands=0;
         foreach(var command in typeof(DebugMod.BindableFunctions).GetMethods(BindingFlags.Static|BindingFlags.Public))
             if(Attribute.IsDefined(command,typeof(DebugMod.BindableMethod)))

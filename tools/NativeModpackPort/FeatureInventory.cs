@@ -38,5 +38,14 @@ static class FeatureInventory
         records.Add(new{Mod="DebugMod",Count=actualCommands.Length,Commands=actualCommands});
         Console.WriteLine("DebugMod: all "+actualCommands.Length+" original commands retained");
         File.WriteAllText(Path.Combine(root,"native-feature-inventory.json"),JsonSerializer.Serialize(records,new JsonSerializerOptions{WriteIndented=true}));
+        using var game=AssemblyDefinition.ReadAssembly(Path.Combine(root,"native-stage/Assembly-CSharp.dll"));
+        var startup=game.MainModule.GetType("StartManager");
+        var installer=startup.Methods.Single(m=>m.Name=="NativeInstallLanguageHook");
+        var field=installer.Body.Instructions.Select(i=>i.Operand).OfType<FieldReference>().Single();
+        var constructor=installer.Body.Instructions.Select(i=>i.Operand).OfType<MethodReference>().Single(m=>m.Name==".ctor");
+        if(field.FieldType.FullName!=constructor.DeclaringType.FullName||field.Name!="LanguageGet")throw new InvalidOperationException("Startup language callback type mismatch");
+        var entry=startup.Methods.Single(m=>m.Name=="Awake").Body.Instructions.First();
+        if(entry.Operand is not MethodReference call||call.FullName!=installer.FullName)throw new InvalidOperationException("Startup must install a typed language callback before original Awake");
+        Console.WriteLine("StartManager: exact native language delegate installed before game initialization");
     }
 }

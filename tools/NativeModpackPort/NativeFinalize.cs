@@ -12,6 +12,29 @@ static class NativeFinalize
         using var loader=AssemblyDefinition.ReadAssembly(Path.Combine(stage,"NativeModLoader.dll"));
         using var runtime=AssemblyDefinition.ReadAssembly(Path.Combine(stage,"NativeModRuntime.dll"));
         var module=assembly.MainModule;
+        using var localization=AssemblyDefinition.ReadAssembly(Path.Combine(stage,"TeamCherry.Localization.dll"),new ReaderParameters{AssemblyResolver=resolver});
+        var language=localization.MainModule.GetType("TeamCherry.Localization.Language");
+        var languageField=language.Fields.Single(f=>f.Name=="LanguageGet");
+        var languageDelegate=language.NestedTypes.Single(t=>t.FullName==languageField.FieldType.FullName);
+        var languageCallback=module.GetType("Modding.ModHooks").Methods.Single(m=>m.Name=="LanguageGet");
+        var invoke=languageDelegate.Methods.Single(m=>m.Name=="Invoke");
+        if(invoke.ReturnType.FullName!=languageCallback.ReturnType.FullName||!invoke.Parameters.Select(p=>p.ParameterType.FullName).SequenceEqual(languageCallback.Parameters.Select(p=>p.ParameterType.FullName)))
+            throw new InvalidOperationException("Language callback ABI changed");
+        var startManager=module.GetType("StartManager");
+        var installer=startManager.Methods.FirstOrDefault(m=>m.Name=="NativeInstallLanguageHook");
+        if(installer==null){installer=new MethodDefinition("NativeInstallLanguageHook",MethodAttributes.Public|MethodAttributes.Static,module.TypeSystem.Void);startManager.Methods.Add(installer);}
+        installer.Body=new MethodBody(installer);var languageIl=installer.Body.GetILProcessor();
+        languageIl.Emit(OpCodes.Ldnull);languageIl.Emit(OpCodes.Ldftn,languageCallback);
+        languageIl.Emit(OpCodes.Newobj,module.ImportReference(languageDelegate.Methods.Single(m=>m.IsConstructor)));
+        languageIl.Emit(OpCodes.Stsfld,module.ImportReference(languageField));languageIl.Emit(OpCodes.Ret);
+        var awake=startManager.Methods.Single(m=>m.Name=="Awake");
+        var languageSet=awake.Body.Instructions.FirstOrDefault(i=>i.Operand is GenericInstanceMethod call&&call.DeclaringType.FullName=="Modding.ReflectionHelper"&&call.Name=="SetField");
+        if(languageSet!=null){
+            int end=awake.Body.Instructions.IndexOf(languageSet);
+            if(!awake.Body.Instructions.Take(end).Any(i=>i.OpCode==OpCodes.Ldstr&&Equals(i.Operand,"LanguageGet")))throw new InvalidOperationException("Unexpected startup setter prefix");
+            for(int index=0;index<=end;index++){awake.Body.Instructions[index].OpCode=OpCodes.Nop;awake.Body.Instructions[index].Operand=null;}
+            awake.Body.Instructions[0].OpCode=OpCodes.Call;awake.Body.Instructions[0].Operand=installer;
+        }
         // The Unity 6 journal recorder is static. Preserve the instance when
         // reached through its instance wrapper, and pass the actual name arg.
         var deaths=module.GetType("EnemyDeathEffects");

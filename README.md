@@ -115,7 +115,7 @@ python3 build.py prepare --game-data "$gameData" --host-tools "$hostTools" --ios
 
 `iosSupport` 应包含 `Trampoline/`、`il2cpp/`、`Variations/` 和 `Data/`；`hostTools` 应包含 `NetCoreRuntime/`、`DotNetSdkRoslyn/` 和 `MonoBleedingEdge/`。如由安装包提取工具链，请把变量指向对应目录。
 
-资源转换支持继续运行同一命令，复用已完成的文件。`prepare` 要求尚不存在的原生工程和资源包输出目录；重新生成时选新目录。默认版本为 **0.2.8 / build 12**，可用 `--version`、`--build-number` 修改。
+资源转换支持继续运行同一命令，复用已完成的文件。`prepare` 要求尚不存在的原生工程和资源包输出目录；重新生成时选新目录。默认版本为 **0.2.9 / build 13**，可用 `--version`、`--build-number` 修改。
 
 ### 编译与签名安装
 
@@ -123,7 +123,7 @@ python3 build.py prepare --game-data "$gameData" --host-tools "$hostTools" --ios
 python3 build.py native --work "$nativeOutput" --jobs 4
 ```
 
-IPA 位于 `$nativeOutput/output/HollowKnight-0.2.8-split-unsigned.ipa`，构建日志在 `$nativeOutput/logs/`。再次执行会复用编译缓存。
+IPA 位于 `$nativeOutput/output/HollowKnight-0.2.9-split-unsigned.ipa`，构建日志在 `$nativeOutput/logs/`。再次执行会复用编译缓存。
 
 使用自己的侧载工具签名安装。
 
@@ -178,6 +178,12 @@ Documents/
 | 手柄 | Xbox，支持 Menu 暂停和 View 背包 |
 
 ## 更新说明
+
+### 0.2.9（内置 Mod 分支）
+
+- 以精确的游戏委托类型安装语言回调，修复开场黑屏、Game Manager 未初始化。
+- 反射桥支持签名兼容的委托字段及属性，保留多播调用顺序。
+- 完整 IPA 更新可复用上一版已压缩的游戏资源。
 
 ### 0.2.8（内置 Mod 分支）
 
