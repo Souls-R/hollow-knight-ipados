@@ -111,7 +111,7 @@ python3 build.py prepare --game-data "$gameData" --host-tools "$hostTools" --ios
 
 The iOS support directory must contain `Trampoline/`, `il2cpp/`, `Variations/` and `Data/`. Host tools must contain `NetCoreRuntime/`, `DotNetSdkRoslyn/` and `MonoBleedingEdge/`. Adjust paths when using extracted installer packages.
 
-Resource conversion resumes completed files when rerun. `prepare` requires fresh native and resource-pack output directories. The default version is **0.2.9 / build 13**; change it with `--version` and `--build-number`.
+Resource conversion resumes completed files when rerun. `prepare` requires fresh native and resource-pack output directories. The default version is **0.2.10 / build 14**; change it with `--version` and `--build-number`.
 
 ### Compile and install
 
@@ -119,7 +119,7 @@ Resource conversion resumes completed files when rerun. `prepare` requires fresh
 python3 build.py native --work "$nativeOutput" --jobs 4
 ```
 
-Output: `$nativeOutput/output/HollowKnight-0.2.9-split-unsigned.ipa`. Logs: `$nativeOutput/logs/`. Subsequent builds reuse compilation caches.
+Output: `$nativeOutput/output/HollowKnight-0.2.10-split-unsigned.ipa`. Logs: `$nativeOutput/logs/`. Subsequent builds reuse compilation caches.
 
 Sign and install using your own sideloading tool.
 

@@ -12,7 +12,7 @@ namespace NativeModpack
     {
         public static object GetTimeSlowed(object owner) {return ((GameManager)owner).TimeSlowed;}
         public static void SetTimeSlowed(object owner,object value)
-        {var manager=(GameManager)owner;manager.timeSlowedCount=Convert.ToBoolean(value)?Math.Max(1,manager.timeSlowedCount):0;}
+        {ref int count=ref GameManager.NativeTimeSlowedCountRef((GameManager)owner);count=Convert.ToBoolean(value)?Math.Max(1,count):0;}
         public static string AssemblyVersion(Assembly assembly)
         {var name=assembly.GetName();return (name.Name=="Satchel"?Satchel.AssemblyUtils.ver:name.Version.ToString())+"-native";}
         public static void WarmType(Type type)
@@ -20,7 +20,7 @@ namespace NativeModpack
             foreach(FieldInfo field in type.GetFields(BindingFlags.Public|BindingFlags.NonPublic|BindingFlags.Instance|BindingFlags.Static))
                 ReflectionHelper.GetFieldInfo(type,field.Name,!field.IsStatic);
         }
-        static ref int SlowCount(GameManager owner) {return ref owner.timeSlowedCount;}
+        static ref int SlowCount(GameManager owner) {return ref GameManager.NativeTimeSlowedCountRef(owner);}
         public static void RegisterAll()
         {
             ModHooks.LoadGlobalSettings();

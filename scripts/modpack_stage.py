@@ -56,6 +56,8 @@ def build(work,dotnet,csc):
     port('static-loader')
     port('input-adapters')
     port('finalize')
+    port('serialization-fix')
+    port('serialization-audit')
     port('audit-native')
     port('inventory')
     (work/'native-modpack-assemblies.json').write_text(json.dumps(ASSEMBLIES,indent=2),encoding='utf-8')

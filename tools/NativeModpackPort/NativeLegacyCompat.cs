@@ -60,7 +60,14 @@ static class NativeLegacyCompat
             foreach(var f in type.Fields){f.IsPublic=true;}
         }
         game.GetType("Modding.ModHooks").Methods.Single(m=>m.Name=="LoadGlobalSettings").IsPublic=true;
-        game.GetType("GameManager").Fields.Single(f=>f.Name=="timeSlowedCount").IsPublic=true;
+        var manager=game.GetType("GameManager");
+        var count=manager.Fields.Single(f=>f.Name=="timeSlowedCount");
+        count.IsPrivate=true;
+        if(!manager.Methods.Any(m=>m.Name=="NativeTimeSlowedCountRef")){
+            var accessor=new MethodDefinition("NativeTimeSlowedCountRef",MethodAttributes.Public|MethodAttributes.Static,new ByReferenceType(game.TypeSystem.Int32));
+            accessor.Parameters.Add(new ParameterDefinition(manager));manager.Methods.Add(accessor);
+            var il=accessor.Body.GetILProcessor();il.Emit(OpCodes.Ldarg_0);il.Emit(OpCodes.Ldflda,count);il.Emit(OpCodes.Ret);
+        }
         foreach(var name in new[]{"Assembly-CSharp","Satchel","GodSeekerPlus","DebugMod","QoL","Osmi"}){
             var assembly=assemblies[name];var module=assembly.MainModule;
             foreach(var t in module.GetTypeReferences())if(t.Scope.Name=="System.Private.CoreLib")t.Scope=module.TypeSystem.CoreLibrary;

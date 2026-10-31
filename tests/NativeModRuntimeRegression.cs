@@ -21,6 +21,10 @@ static class NativeModRuntimeRegression
     {if(!condition)throw new Exception(name);checks++;Console.WriteLine("PASS "+name);}
     static int Main()
     {
+        var originalCounter=typeof(GameManager).GetField("timeSlowedCount",BindingFlags.NonPublic|BindingFlags.Instance);
+        Check(originalCounter!=null&&originalCounter.IsPrivate&&!Attribute.IsDefined(originalCounter,typeof(UnityEngine.SerializeField)),"game time counter preserves its original private nonserialized scene layout");
+        var countAccessor=typeof(GameManager).GetMethod("NativeTimeSlowedCountRef",BindingFlags.Public|BindingFlags.Static);
+        Check(countAccessor!=null&&countAccessor.ReturnType==typeof(int).MakeByRefType(),"native Mod access retains a true field reference without exposing a serialized field");
         var languageField=typeof(CallbackHolder).GetField("LanguageGet");
         var setLanguage=(Action<Func<string,string,string>>)ReflectionBridge.GetStaticFieldSetter<Func<string,string,string>>(languageField);
         int languageCalls=0;

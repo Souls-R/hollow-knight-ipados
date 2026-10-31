@@ -4,6 +4,8 @@ using System.Text.Json;
 
 if(args.Length<2) throw new ArgumentException("audit <modpack-root>");
 var root=Path.GetFullPath(args[1]);
+if(args[0]=="serialization-audit") { SerializationLayout.Check(root,false); return; }
+if(args[0]=="serialization-fix") { SerializationLayout.Check(root,true); return; }
 if(args[0]=="inventory") { FeatureInventory.Check(root); return; }
 if(args[0]=="hooks") { StaticHooks.Build(root); return; }
 if(args[0]=="hook-sources") { StaticHooks.Build(root,true); return; }
